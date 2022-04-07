@@ -18,6 +18,8 @@ int main()
     std::string str1;
     std::string str2;
 
+    bool isEmpty = true;
+
     int n1{}, n2{}, counter{};
 
     std::cout << "Скопировать из файла F1 в файл F2 все строки, начинающиеся 'А' и заканчивающиеся на 'С', расположенные между строками N1 и N2.\nОпределить количество слов в первой строке файла F2.\n\n";
@@ -139,6 +141,7 @@ int main()
                         std::cout << "\nПервая строка в диапазоне, попадающая под условия - " << counter << "\n\n" << output << '\n';
                         inputF2 << "Первая строка в диапазоне, попадающая под условия - " << counter << std::endl << output << std::endl  << "Количество пробелов в этой строке - " << std::count(output.begin(), output.end(), ' ') << std::endl << std::endl;
                         counter++;
+                        isEmpty = false;
                         while (counter <= n2 && std::getline(outputF1, output))
                         {
                             if (output[0] == 'А' && output[output.length() - 1] == 'С')
@@ -149,12 +152,8 @@ int main()
                             else std::cout << "\nСтрока " << counter << " не содержит необходимые символы в начале и конце строки\n";
                             counter++;
                         }
+
                         std::cout << "\nВне диапазона!\n";
-
-                        std::cout << "\nЗакрытие потоков!\n";
-
-                        outputF1.close();
-                        inputF2.close();
                     }
                     else
                     {
@@ -167,9 +166,15 @@ int main()
         }
         else std::cout << "Невозможно открыть файл F2.txt для записи";
 
-        if (outputF1.is_open()) { outputF1.close(); std::cout << "\nКонтрольное закрытие потока F1! (Где-то ошибка)\n"; }
+        if (isEmpty)
+        {
+            inputF2 << "Строчек, соответсвующих условию найдено не было!!";
+            std::cout << "\nСтрочек, соответсвующих условию найдено не было!!\n";
+        }
 
-        if (inputF2.is_open()) { inputF2.close(); std::cout << "\nКонтрольное закрытие потока F2! (Где-то ошибка)\n"; }
+        if (outputF1.is_open()) { outputF1.close(); std::cout << "\nЗакрытие потока F1!\n"; }
+
+        if (inputF2.is_open()) { inputF2.close(); std::cout << "\nЗакрытие потока F2!\n"; }
     }
     else std::cout << "Файл F1.txt закрыт для чтения";
 
